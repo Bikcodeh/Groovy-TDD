@@ -1,4 +1,4 @@
-package petros.efthymiou.groovy
+package petros.efthymiou.groovy.playlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
+import petros.efthymiou.groovy.R
 
 class PlaylistFragment : Fragment() {
 
@@ -45,7 +45,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(repository, Dispatchers.IO)
+        viewModelFactory = PlaylistViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
 

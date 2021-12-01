@@ -33,7 +33,13 @@ android {
     }
 
     testOptions {
-        animationsDisabled = true
+        unitTests.returnDefaultValues = true
+        animationsDisabled true
+
+        unitTests {
+            includeAndroidResources = true
+        }
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
     buildFeatures {
         viewBinding true
