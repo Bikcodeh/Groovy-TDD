@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
 
 class PlaylistFragment : Fragment() {
 
@@ -44,8 +45,8 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(PlaylistViewModel::class.java)
+        viewModelFactory = PlaylistViewModelFactory(repository, Dispatchers.IO)
+        viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
 
     companion object {
