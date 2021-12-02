@@ -37,20 +37,20 @@ class PlaylistRepositoryImplShould: BaseUnitTest() {
         assertEquals(exception, repository.getPlaylist().first().exceptionOrNull())
     }
 
-    private suspend fun mockFailureCase(): PlaylistRepositoryImpl {
-        whenever(service.fetchPlaylist()).thenReturn(
-            flow { emit(Result.failure<List<Playlist>>(exception)) }
-        )
-
-        return PlaylistRepositoryImpl(service)
-    }
-
     @Test
     fun emitPlaylistFromService() = runBlockingTest {
 
         val repository = mockSuccessfulCase()
 
         assertEquals(playlist, repository.getPlaylist().first().getOrNull())
+    }
+
+    private suspend fun mockFailureCase(): PlaylistRepositoryImpl {
+        whenever(service.fetchPlaylist()).thenReturn(
+            flow { emit(Result.failure<List<Playlist>>(exception)) }
+        )
+
+        return PlaylistRepositoryImpl(service)
     }
 
     private suspend fun mockSuccessfulCase(): PlaylistRepositoryImpl {

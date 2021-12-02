@@ -14,7 +14,8 @@ class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlaylistViewModel
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val service = PlaylistService()
+    private val retrofit = ApiService.getRetrofit()
+    private val service = PlaylistService(retrofit.create(PlaylistApi::class.java))
     private val repository = PlaylistRepositoryImpl(service)
 
     override fun onCreateView(
