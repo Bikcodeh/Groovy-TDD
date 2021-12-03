@@ -34,7 +34,10 @@ class PlaylistFragment : Fragment() {
         setupViewModel()
 
         viewModel.loader.observe(viewLifecycleOwner) { isLoading ->
-            binding.loader.isVisible = isLoading
+            when(isLoading){
+                true -> binding.loader.visibility = View.VISIBLE
+                false -> binding.loader.visibility = View.GONE
+            }
         }
 
         viewModel.playlist.observe(viewLifecycleOwner) { result ->

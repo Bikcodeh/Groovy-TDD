@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.schibsted.spain.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.schibsted.spain.barista.internal.matcher.DrawableMatcher.Companion.withDrawable
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -55,6 +56,12 @@ class PlaylistFeature {
     @Test
     fun displayLoaderWhileFetchingThePlaylist() {
         assertDisplayed(R.id.loader)
+    }
+
+    @Test
+    fun hidesLoader() {
+        Thread.sleep(4000)
+        assertNotDisplayed(R.id.loader)
     }
 
     fun nthChildOf(parentMatcher: Matcher<View>, childPosition: Int): Matcher<View> {

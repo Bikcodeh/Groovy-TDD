@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -14,6 +15,7 @@ import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 import java.lang.RuntimeException
 
+@ExperimentalCoroutinesApi
 class PlaylistViewModelShould : BaseUnitTest() {
 
     private val repository: PlaylistRepositoryImpl = mock()
@@ -53,18 +55,42 @@ class PlaylistViewModelShould : BaseUnitTest() {
         }
     }
 
-    private suspend fun mockErrorCase(): PlaylistViewModel {
-        whenever(repository.getPlaylist()).thenReturn(
-            flow {
-                emit(Result.failure<List<Playlist>>(exception))
-            }
-        )
 
+    @Test
+    fun closeLoaderAfterPlaylistLoad() {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(false, values.last())
+        }
+    }
+
+    @Test
+    fun closeLoaderAfterError() = runBlockingTest {
+        val viewModel = mockErrorCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(false, values.last())
+        }
+    }
+
+    private suspend fun mockErrorCase(): PlaylistViewModel {
+        runBlockingTest {
+            whenever(repository.getPlaylist()).thenReturn(
+                flow {
+                    emit(Result.failure<List<Playlist>>(exception))
+                }
+            )
+        }
         return PlaylistViewModel(repository)
     }
 
     private fun mockSuccessfulCase(): PlaylistViewModel {
-        runBlocking {
+        runBlockingTest {
             whenever(repository.getPlaylist()).thenReturn(
                 flow {
                     emit(expected)
