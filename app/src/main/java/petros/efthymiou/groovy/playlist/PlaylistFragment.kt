@@ -8,15 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import petros.efthymiou.groovy.R
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlaylistViewModel
+
+    @Inject
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val retrofit = ApiService.getRetrofit()
-    private val service = PlaylistService(retrofit.create(PlaylistApi::class.java))
-    private val repository = PlaylistRepositoryImpl(service)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +49,6 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
     }
 
