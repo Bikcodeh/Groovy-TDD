@@ -14,5 +14,5 @@ data class Playlist(
     @SerializedName("category")
     @Expose
     val category: String,
-    val image: Int = R.mipmap.playlist
+    val image: Int
 )
