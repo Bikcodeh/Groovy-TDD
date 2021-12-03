@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import petros.efthymiou.groovy.R
+import petros.efthymiou.groovy.databinding.FragmentPlaylistBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlaylistFragment : Fragment() {
+
+    private var _binding: FragmentPlaylistBinding? = null
+    private val binding: FragmentPlaylistBinding get() = _binding!!
 
     lateinit var viewModel: PlaylistViewModel
 
@@ -23,26 +28,34 @@ class PlaylistFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_playlist, container, false)
+    ): View {
+        _binding = FragmentPlaylistBinding.inflate(inflater, container, false)
 
         setupViewModel()
 
+        viewModel.loader.observe(viewLifecycleOwner) { isLoading ->
+            binding.loader.isVisible = isLoading
+        }
+
         viewModel.playlist.observe(viewLifecycleOwner) { result ->
             result.getOrNull()?.let { playlist ->
-                setupList(view, playlist)
+                setupList(playlist)
             } ?: run {
                 //TODO
             }
         }
-        return view
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupList(
-        view: View?,
         playlist: List<Playlist>,
     ) {
-        with(view as RecyclerView) {
+        binding.playlistList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = MyPlaylistRecyclerViewAdapter(playlist)
         }

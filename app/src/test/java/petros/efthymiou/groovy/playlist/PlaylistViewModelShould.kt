@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import petros.efthymiou.groovy.utils.BaseUnitTest
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 import java.lang.RuntimeException
 
@@ -36,15 +37,30 @@ class PlaylistViewModelShould : BaseUnitTest() {
 
     @Test
     fun emitErrorWhenReceiveError()  = runBlockingTest {
+        val viewModel = mockErrorCase()
+
+        assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+    }
+
+    @Test
+    fun showSpinnerWhileLoading() = runBlockingTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlist.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
+    }
+
+    private suspend fun mockErrorCase(): PlaylistViewModel {
         whenever(repository.getPlaylist()).thenReturn(
             flow {
                 emit(Result.failure<List<Playlist>>(exception))
             }
         )
 
-        val viewModel = PlaylistViewModel(repository)
-
-        assertEquals(exception, viewModel.playlist.getValueForTest()!!.exceptionOrNull())
+        return PlaylistViewModel(repository)
     }
 
     private fun mockSuccessfulCase(): PlaylistViewModel {
