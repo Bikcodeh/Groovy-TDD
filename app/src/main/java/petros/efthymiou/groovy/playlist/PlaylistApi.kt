@@ -5,6 +5,6 @@ import retrofit2.http.GET
 interface PlaylistApi {
 
     @GET("playlist")
-    suspend fun fetchAllPlaylist(): List<Playlist>
+    suspend fun fetchAllPlaylist(): List<PlaylistRaw>
 
 }

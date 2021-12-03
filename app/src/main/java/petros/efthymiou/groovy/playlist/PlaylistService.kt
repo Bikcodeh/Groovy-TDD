@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class PlaylistService @Inject constructor(private val playlistApi: PlaylistApi) {
 
-    suspend fun fetchPlaylist(): Flow<Result<List<Playlist>>> {
+    suspend fun fetchPlaylist(): Flow<Result<List<PlaylistRaw>>> {
         return  flow {
             emit(Result.success(playlistApi.fetchAllPlaylist()))
         }.catch {
