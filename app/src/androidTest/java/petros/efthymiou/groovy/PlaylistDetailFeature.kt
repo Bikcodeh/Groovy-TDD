@@ -51,6 +51,19 @@ class PlaylistDetailFeature : BaseUITest() {
         assertNotDisplayed(R.id.progressDetails)
     }
 
+    @Test
+    fun displayErrorMessageWhenNetworkFails() {
+        onView(
+            allOf(
+                withId(R.id.ivPlaylist),
+                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 1))
+            )
+        )
+            .perform(ViewActions.click())
+
+        assertDisplayed(R.string.generic_error)
+    }
+
     private fun navigateToDetailsScreen() {
         onView(
             allOf(
