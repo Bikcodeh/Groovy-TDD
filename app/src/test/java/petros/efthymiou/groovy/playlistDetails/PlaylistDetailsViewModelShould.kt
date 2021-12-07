@@ -15,6 +15,7 @@ import petros.efthymiou.groovy.details.PlaylistDetails
 import petros.efthymiou.groovy.details.PlaylistDetailsViewModel
 import petros.efthymiou.groovy.playlist.PlaylistRepositoryImpl
 import petros.efthymiou.groovy.utils.BaseUnitTest
+import petros.efthymiou.groovy.utils.captureValues
 import petros.efthymiou.groovy.utils.getValueForTest
 import java.lang.RuntimeException
 
@@ -38,7 +39,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
     fun getPlaylistDetailFromRepository() = runBlockingTest {
 
         mockSuccessfulCase()
-
+        viewModel.getPlaylistDetails(id)
         viewModel.playlistDetails.getValueForTest()
 
         verify(service, times(1)).fetchPlaylistDetails(id)
@@ -48,7 +49,7 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
     fun emitsPlaylistDetailsFromService() = runBlockingTest {
 
         mockSuccessfulCase()
-
+        viewModel.getPlaylistDetails(id)
         assertEquals(expected, viewModel.playlistDetails.getValueForTest())
     }
 
@@ -57,6 +58,28 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
         mockErrorCase()
 
         assertEquals(error, viewModel.playlistDetails.getValueForTest())
+    }
+
+    @Test
+    fun showLoaderWhileIsFetchingData() {
+        mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
+            viewModel.playlistDetails.getValueForTest()
+
+            assertEquals(true, values[0])
+        }
+    }
+
+    @Test
+    fun hideLoaderWhenDoneFetchingData() {
+        mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.getPlaylistDetails(id)
+            assertEquals(false, values.last())
+        }
     }
 
     private fun mockErrorCase() {
@@ -71,7 +94,5 @@ class PlaylistDetailsViewModelShould : BaseUnitTest() {
         whenever(service.fetchPlaylistDetails(id)).thenReturn(flow {
             emit(expected)
         })
-
-        viewModel.getPlaylistDetails(id)
     }
 }

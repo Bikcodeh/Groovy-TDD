@@ -47,6 +47,13 @@ class PlaylistDetailFragment : Fragment() {
                 //TODO
             }
         }
+
+        viewModel.loader.observe(viewLifecycleOwner) { isLoading ->
+            when (isLoading) {
+                true -> binding.progressDetails.visibility = View.VISIBLE
+                else -> binding.progressDetails.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupViewModel() {
