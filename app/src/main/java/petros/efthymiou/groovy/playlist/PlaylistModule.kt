@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
 import okhttp3.OkHttpClient
+import petros.efthymiou.groovy.details.PlaylistDetailsApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,6 +21,10 @@ class PlaylistModule {
     fun playlistApiProvider(retrofit: Retrofit): PlaylistApi {
         return retrofit.create(PlaylistApi::class.java)
     }
+
+    @Provides
+    fun playlistDetailApiProvider(retrofit: Retrofit): PlaylistDetailsApi =
+        retrofit.create(PlaylistDetailsApi::class.java)
 
     @Provides
     fun retrofitProvider(): Retrofit {

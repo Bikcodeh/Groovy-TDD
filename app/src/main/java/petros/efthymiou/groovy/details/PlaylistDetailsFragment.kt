@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import petros.efthymiou.groovy.PlaylistDetailFragmentArgs
+import dagger.hilt.android.AndroidEntryPoint
 import petros.efthymiou.groovy.databinding.FragmentPlaylistDetailBinding
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class PlaylistDetailFragment : Fragment() {
 
     lateinit var viewModel: PlaylistDetailsViewModel
@@ -22,11 +22,7 @@ class PlaylistDetailFragment : Fragment() {
     private var _binding: FragmentPlaylistDetailBinding? = null
     private val binding get() = _binding!!
 
-    val args: PlaylistDetailFragmentArgs by navArgs()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private val args: PlaylistDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
