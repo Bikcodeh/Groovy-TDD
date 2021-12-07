@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
+import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotExist
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
@@ -62,6 +63,21 @@ class PlaylistDetailFeature : BaseUITest() {
             .perform(ViewActions.click())
 
         assertDisplayed(R.string.generic_error)
+    }
+
+    @Test
+    fun hidesErrorMessage(){
+        onView(
+            allOf(
+                withId(R.id.ivPlaylist),
+                ViewMatchers.isDescendantOfA(nthChildOf(withId(R.id.playlist_list), 1))
+            )
+        )
+            .perform(ViewActions.click())
+
+        Thread.sleep(3000)
+
+        assertNotExist(R.string.generic_error)
     }
 
     private fun navigateToDetailsScreen() {
